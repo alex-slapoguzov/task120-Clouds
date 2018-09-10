@@ -6,11 +6,15 @@ import com.issoft.training.pages.TutByPage;
 import com.issoft.training.pages.YandexPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 public class LoginToTutByWithPageFactoryPatternTest {
@@ -18,11 +22,19 @@ public class LoginToTutByWithPageFactoryPatternTest {
 	private final static String TYT_BY_URL = "https://www.tut.by/";
 	private final static String LOGIN = "seleniumtests10";
 	private final static String PASSWORD = "060788avavav";
+	public static final String USERNAME = "AlexSlap";
+	public static final String ACCESS_KEY = "4e02e29d-3ffa-4f97-beba-eb4975a2f379";
+	public static final String URL = "https://" + USERNAME + ":" + ACCESS_KEY + "@ondemand.saucelabs.com:443/wd/hub";
 	private WebDriver driver;
+	private DesiredCapabilities caps;
 
 	@BeforeClass
-	public void setUp() {
-		driver = new ChromeDriver();
+	public void setUp() throws MalformedURLException {
+		caps = DesiredCapabilities.chrome();
+		caps.setCapability("platform", "Linux");
+		caps.setCapability("version", "40.0");
+
+		driver = new RemoteWebDriver(new URL(URL), caps);
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(7, TimeUnit.SECONDS);
 		driver.get(TYT_BY_URL);
